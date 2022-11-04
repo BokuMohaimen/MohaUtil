@@ -1,0 +1,6 @@
+name: MohaUtil
+version: '${version}'
+main: mohautil.mohautil.MohaUtil
+api-version: 1.19
+commands:
+  moha:
