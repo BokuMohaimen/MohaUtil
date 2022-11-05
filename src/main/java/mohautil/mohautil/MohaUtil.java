@@ -157,6 +157,22 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                 }
             }
 
+            if (event.getSlot() == 8) {
+                if (event.getCurrentItem().getType() == Material.EMERALD_BLOCK) {
+                    hasitemMeta.setUnbreakable(false);
+                    event.getInventory().setItem(8, falseitem);
+                    hasitem.setItemMeta(hasitemMeta);
+                    event.setCancelled(true);
+                    return;
+                } else {
+                    hasitemMeta.setUnbreakable(true);
+                    event.getInventory().setItem(8, trueitem);
+                    hasitem.setItemMeta(hasitemMeta);
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+
             event.setCancelled(true);
         }
 
@@ -230,6 +246,11 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                     i7Meta.setDisplayName("何に設置できるかを隠す");
                     i7.setItemMeta(i7Meta);
 
+                    ItemStack i8 = new ItemStack(Material.PAPER);
+                    ItemMeta i8Meta = i8.getItemMeta();
+                    i8Meta.setDisplayName("不可壊");
+                    i8.setItemMeta(i8Meta);
+
                     inventory.setItem(9,i1);
                     inventory.setItem(10,i2);
                     inventory.setItem(11,i3);
@@ -237,6 +258,7 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                     inventory.setItem(13,i5);
                     inventory.setItem(14,i6);
                     inventory.setItem(15,i7);
+                    inventory.setItem(17,i8);
 
                     if (itemMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
                         ItemStack enchant = new ItemStack(Material.EMERALD_BLOCK);
@@ -328,6 +350,19 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                         enchantMeta.setDisplayName("HIDE_PLACED_ON FALSE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(6, enchant);
+                    }
+                    if (itemMeta.isUnbreakable()) {
+                        ItemStack enchant = new ItemStack(Material.EMERALD_BLOCK);
+                        ItemMeta enchantMeta = enchant.getItemMeta();
+                        enchantMeta.setDisplayName("UNBREAKABLE TRUE");
+                        enchant.setItemMeta(enchantMeta);
+                        inventory.setItem(8, enchant);
+                    } else {
+                        ItemStack enchant = new ItemStack(Material.REDSTONE_BLOCK);
+                        ItemMeta enchantMeta = enchant.getItemMeta();
+                        enchantMeta.setDisplayName("UNBREAKABLE FALSE");
+                        enchant.setItemMeta(enchantMeta);
+                        inventory.setItem(8, enchant);
                     }
                     player.openInventory(inventory);
                     return true;
