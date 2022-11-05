@@ -23,6 +23,7 @@ import java.util.List;
 public final class MohaUtil extends JavaPlugin implements Listener {
 
     String inv = "§asetFlags§r";
+    String prefix = "§f§l[=§dMU§r§l=]";
 
     @Override
     public void onEnable() {
@@ -187,25 +188,28 @@ public final class MohaUtil extends JavaPlugin implements Listener {
             ItemStack item = player.getInventory().getItemInMainHand();
             ItemMeta itemMeta = item.getItemMeta();
             if (args.length == 0) {
-                sender.sendMessage("=====MOHA=====");
-                sender.sendMessage("/moha color ➡ 装飾コードを表示します");
-                sender.sendMessage("/moha setdata [数字] ➡ 手に持っているアイテムをカスタムモデルデータ[数字]に設定します");
-                sender.sendMessage("/moha setench [エンチャント名] [レベル]");
-                sender.sendMessage(" ➡ 手に持っているアイテムにエンチャントを付与します");
-                sender.sendMessage("/moha unbre ➡ 手に持っているアイテムを不可壊します");
+                sender.sendMessage("§7==========="+prefix+"§7===========");
+                sender.sendMessage("§f§l/moha §e§lcolor §r§7➡ 装飾コードを表示します");
+                sender.sendMessage("§f§l/moha §e§lsetdata [数字]");
+                sender.sendMessage(" §r§7➡ 手に持っているアイテムをカスタムモデルデータ[数字]に設定します");
+                sender.sendMessage("§f§l/moha §e§lsetench [エンチャント名] [レベル]");
+                sender.sendMessage(" §r§7➡ 手に持っているアイテムにエンチャントを付与します");
+                sender.sendMessage("§f§l/moha §e§ldelench [エンチャント名] §r§7➡ 手に持っているアイテムエンチャントを外します");
+                sender.sendMessage("§f§l/moha §e§lsetflag §r§7➡ アイテムのフラグを設定するGUIを開きます");
+                sender.sendMessage("§7============================");
                 return true;
             }
             if (args.length == 1) {
                 if (args[0].equals("color")) {
 
-                    sender.sendMessage("§11 §22 §33 §44 §55 §66 §77 §88 §99 §00 §aa §bb §cc §dd §ee §ff §gg §kk§r §ll§r §mm§r §nn§r §oo§r");
+                    sender.sendMessage(prefix + " §11 §22 §33 §44 §55 §66 §77 §88 §99 §00 §aa §bb §cc §dd §ee §ff §gg §kk§r §ll§r §mm§r §nn§r §oo§r");
                     return true;
 
                 }
                 if (args[0].equalsIgnoreCase("setflag")) {
 
                     if (item.getType() == Material.AIR) {
-                        player.sendMessage("手に何かアイテムを持ってださい！");
+                        player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
                         return false;
                     }
 
@@ -213,42 +217,42 @@ public final class MohaUtil extends JavaPlugin implements Listener {
 
                     ItemStack i1 = new ItemStack(Material.PAPER);
                     ItemMeta i1Meta = i1.getItemMeta();
-                    i1Meta.setDisplayName("エンチャントを隠す");
+                    i1Meta.setDisplayName("§lエンチャントを隠す");
                     i1.setItemMeta(i1Meta);
 
                     ItemStack i2 = new ItemStack(Material.PAPER);
                     ItemMeta i2Meta = i2.getItemMeta();
-                    i2Meta.setDisplayName("不可壊を隠す");
+                    i2Meta.setDisplayName("§l不可壊を隠す");
                     i2.setItemMeta(i2Meta);
 
                     ItemStack i3 = new ItemStack(Material.PAPER);
                     ItemMeta i3Meta = i3.getItemMeta();
-                    i3Meta.setDisplayName("身に着けたときの効果の詳細を隠す");
+                    i3Meta.setDisplayName("§l身に着けたときの効果の詳細を隠す");
                     i3.setItemMeta(i3Meta);
 
                     ItemStack i4 = new ItemStack(Material.PAPER);
                     ItemMeta i4Meta = i4.getItemMeta();
-                    i4Meta.setDisplayName("ポーション効果の詳細を隠す");
+                    i4Meta.setDisplayName("§lポーション効果の詳細を隠す");
                     i4.setItemMeta(i4Meta);
 
                     ItemStack i5 = new ItemStack(Material.PAPER);
                     ItemMeta i5Meta = i5.getItemMeta();
-                    i5Meta.setDisplayName("何を破壊できるかを隠す");
+                    i5Meta.setDisplayName("§l何を破壊できるかを隠す");
                     i5.setItemMeta(i5Meta);
 
                     ItemStack i6 = new ItemStack(Material.PAPER);
                     ItemMeta i6Meta = i6.getItemMeta();
-                    i6Meta.setDisplayName("染料の詳細を隠す");
+                    i6Meta.setDisplayName("§l染料の詳細を隠す");
                     i6.setItemMeta(i6Meta);
 
                     ItemStack i7 = new ItemStack(Material.PAPER);
                     ItemMeta i7Meta = i7.getItemMeta();
-                    i7Meta.setDisplayName("何に設置できるかを隠す");
+                    i7Meta.setDisplayName("§l何に設置できるかを隠す");
                     i7.setItemMeta(i7Meta);
 
                     ItemStack i8 = new ItemStack(Material.PAPER);
                     ItemMeta i8Meta = i8.getItemMeta();
-                    i8Meta.setDisplayName("不可壊");
+                    i8Meta.setDisplayName("§l不可壊");
                     i8.setItemMeta(i8Meta);
 
                     inventory.setItem(9,i1);
@@ -263,104 +267,104 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                     if (itemMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
                         ItemStack enchant = new ItemStack(Material.EMERALD_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_ENCHANT TRUE");
+                        enchantMeta.setDisplayName("§a§lHIDE_ENCHANT TRUE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(0, enchant);
                     } else {
                         ItemStack enchant = new ItemStack(Material.REDSTONE_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_ENCHANT FALSE");
+                        enchantMeta.setDisplayName("§4§lHIDE_ENCHANT FALSE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(0, enchant);
                     }
                     if (itemMeta.hasItemFlag(ItemFlag.HIDE_UNBREAKABLE)) {
                         ItemStack enchant = new ItemStack(Material.EMERALD_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_UNBREAKABLE TRUE");
+                        enchantMeta.setDisplayName("§a§lHIDE_UNBREAKABLE TRUE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(1, enchant);
                     } else {
                         ItemStack enchant = new ItemStack(Material.REDSTONE_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_UNBREAKABLE FALSE");
+                        enchantMeta.setDisplayName("§4§lHIDE_UNBREAKABLE FALSE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(1, enchant);
                     }
                     if (itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
                         ItemStack enchant = new ItemStack(Material.EMERALD_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_ATTRIBUTES TRUE");
+                        enchantMeta.setDisplayName("§a§lHIDE_ATTRIBUTES TRUE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(2, enchant);
                     } else {
                         ItemStack enchant = new ItemStack(Material.REDSTONE_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_ATTRIBUTES FALSE");
+                        enchantMeta.setDisplayName("§4§lHIDE_ATTRIBUTES FALSE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(2, enchant);
                     }
                     if (itemMeta.hasItemFlag(ItemFlag.HIDE_POTION_EFFECTS)) {
                         ItemStack enchant = new ItemStack(Material.EMERALD_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_POTION_EFFECTS TRUE");
+                        enchantMeta.setDisplayName("§a§lHIDE_POTION_EFFECTS TRUE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(3, enchant);
                     } else {
                         ItemStack enchant = new ItemStack(Material.REDSTONE_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_POTION_EFFECTS FALSE");
+                        enchantMeta.setDisplayName("§4§lHIDE_POTION_EFFECTS FALSE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(3, enchant);
                     }
                     if (itemMeta.hasItemFlag(ItemFlag.HIDE_DESTROYS)) {
                         ItemStack enchant = new ItemStack(Material.EMERALD_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_DESTROYS TRUE");
+                        enchantMeta.setDisplayName("§a§lHIDE_DESTROYS TRUE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(4, enchant);
                     } else {
                         ItemStack enchant = new ItemStack(Material.REDSTONE_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_DESTROYS FALSE");
+                        enchantMeta.setDisplayName("§4§lHIDE_DESTROYS FALSE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(4, enchant);
                     }
                     if (itemMeta.hasItemFlag(ItemFlag.HIDE_DYE)) {
                         ItemStack enchant = new ItemStack(Material.EMERALD_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_DYE TRUE");
+                        enchantMeta.setDisplayName("§a§lHIDE_DYE TRUE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(5, enchant);
                     } else {
                         ItemStack enchant = new ItemStack(Material.REDSTONE_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_DYE FALSE");
+                        enchantMeta.setDisplayName("§4§lHIDE_DYE FALSE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(5, enchant);
                     }
                     if (itemMeta.hasItemFlag(ItemFlag.HIDE_PLACED_ON)) {
                         ItemStack enchant = new ItemStack(Material.EMERALD_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_PLACED_ON TRUE");
+                        enchantMeta.setDisplayName("§a§lHIDE_PLACED_ON TRUE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(6, enchant);
                     } else {
                         ItemStack enchant = new ItemStack(Material.REDSTONE_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("HIDE_PLACED_ON FALSE");
+                        enchantMeta.setDisplayName("§4§lHIDE_PLACED_ON FALSE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(6, enchant);
                     }
                     if (itemMeta.isUnbreakable()) {
                         ItemStack enchant = new ItemStack(Material.EMERALD_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("UNBREAKABLE TRUE");
+                        enchantMeta.setDisplayName("§a§lUNBREAKABLE TRUE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(8, enchant);
                     } else {
                         ItemStack enchant = new ItemStack(Material.REDSTONE_BLOCK);
                         ItemMeta enchantMeta = enchant.getItemMeta();
-                        enchantMeta.setDisplayName("UNBREAKABLE FALSE");
+                        enchantMeta.setDisplayName("§4§lUNBREAKABLE FALSE");
                         enchant.setItemMeta(enchantMeta);
                         inventory.setItem(8, enchant);
                     }
@@ -372,29 +376,50 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                 if (args[0].equalsIgnoreCase("setdata")) {
 
                     if (item.getType() == Material.AIR) {
-                        player.sendMessage("手に何かアイテムを持ってださい！");
+                        player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
                         return false;
                     }
 
                     itemMeta.setCustomModelData(Integer.valueOf(args[1]));
                     item.setItemMeta(itemMeta);
-                    player.sendMessage("カスタムモデルデータ : " + args[1] + "に変更しました。");
+                    player.sendMessage(prefix + " §lカスタムモデルデータ §r: §e§l" + args[1] + "§r§lに変更しました。");
                     return true;
-
                 }
+
+                if (args[0].equalsIgnoreCase("delench")) {
+
+                    if (item.getType() == Material.AIR) {
+                        player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
+                        return false;
+                    }
+                    if (!itemMeta.hasEnchants()) {
+                        player.sendMessage(prefix + " §c外せるエンチャントは存在しません！");
+                        return false;
+                    }
+                    if (!itemMeta.hasEnchant(Enchantment.getByKey(NamespacedKey.minecraft(args[1])))) {
+                        player.sendMessage(prefix + " §cそのエンチャントは付与されていません！");
+                        return false;
+                    }
+                    itemMeta.removeEnchant(Enchantment.getByKey(NamespacedKey.minecraft(args[1])));
+                    item.setItemMeta(itemMeta);
+                    player.sendMessage(prefix + " §e§l" + args[1] + " §r§lのエンチャントを外しました");
+                    return true;
+                }
+
             }
             if (args.length == 3) {
                 if (args[0].equalsIgnoreCase("setench")) {
                     if (item.getType() == Material.AIR) {
-                        player.sendMessage("手に何かアイテムを持ってださい！");
+                        player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
                         return false;
                     }
                     itemMeta.addEnchant(Enchantment.getByKey(NamespacedKey.minecraft(args[1])), Integer.parseInt(args[2]), true);
                     item.setItemMeta(itemMeta);
+                    player.sendMessage(prefix + " §e§l" + args[1] + " §rの レベル§e§l " + args[2] + " §r§lを付与しました");
                     return true;
                 }
             } else {
-                sender.sendMessage("使い方が間違っています！");
+                sender.sendMessage(prefix + " §c使い方が間違っています！");
                 return false;
             }
         }
@@ -404,10 +429,41 @@ public final class MohaUtil extends JavaPlugin implements Listener {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if(args.length==1) {
-            return strings(args[0], Arrays.asList("color","setdata","setench","setflag"));
+            return strings(args[0], Arrays.asList("color","setdata","setench","delench","setflag"));
         }
         if(args.length==2) {
             if (args[0].equalsIgnoreCase("setench")) {
+                List<String> list = new ArrayList<>();
+                list.add("protection");
+                list.add("fire_protection");
+                list.add("feather_falling");
+                list.add("blast_protection");
+                list.add("projectile_protection");
+                list.add("respiration");
+                list.add("aqua_affinity");
+                list.add("thorns");
+                list.add("depth_strider");
+                list.add("frost_walker");
+                list.add("sharpness");
+                list.add("smite");
+                list.add("bane_of_arthropods");
+                list.add("knockback");
+                list.add("fire_aspect");
+                list.add("looting");
+                list.add("efficiency");
+                list.add("silk_touch");
+                list.add("unbreaking");
+                list.add("fortune");
+                list.add("power");
+                list.add("punch");
+                list.add("flame");
+                list.add("infinity");
+                list.add("luck_of_the_sea");
+                list.add("lure");
+                list.add("mending");
+                return strings(args[1], list);
+            }
+            if (args[0].equalsIgnoreCase("delench")) {
                 List<String> list = new ArrayList<>();
                 list.add("protection");
                 list.add("fire_protection");
