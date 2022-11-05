@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -19,14 +20,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class MohaUtil extends JavaPlugin {
+public final class MohaUtil extends JavaPlugin implements Listener {
 
     String inv = "§asetFlags§r";
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-
+        Bukkit.getServer().getPluginManager().registerEvents(this, this);
     }
 
     @Override
@@ -37,114 +38,126 @@ public final class MohaUtil extends JavaPlugin {
     @EventHandler
     public void onClickInventory(InventoryClickEvent event) {
 
-        event.getWhoClicked().sendMessage(inv.replace("§", "a"));
+        if (event.getView().getTitle().contains(inv)) {
 
-        if (event.getView().getTitle().equals(inv)) {
-
-            ItemStack pitem = event.getWhoClicked().getInventory().getItemInMainHand();
-            ItemMeta pitemMeta = pitem.getItemMeta();
+            ItemStack hasitem = event.getWhoClicked().getInventory().getItemInMainHand();
+            ItemMeta hasitemMeta = hasitem.getItemMeta();
             ItemStack falseitem = new ItemStack(Material.REDSTONE_BLOCK);
             ItemStack trueitem = new ItemStack(Material.EMERALD_BLOCK);
 
-            event.getWhoClicked().sendMessage("a");
-
             if (event.getSlot() == 0) {
-                if (event.getCurrentItem().equals(Material.EMERALD_BLOCK)) {
-                    pitemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+                if (event.getCurrentItem().getType() == (Material.EMERALD_BLOCK)) {
+                    hasitemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
                     event.getInventory().setItem(0, falseitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 } else {
-                    pitemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    hasitemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     event.getInventory().setItem(0, trueitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 }
             }
 
             if (event.getSlot() == 1) {
-                if (event.getCurrentItem().equals(Material.EMERALD_BLOCK)) {
-                    pitemMeta.removeItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+                if (event.getCurrentItem().getType() == (Material.EMERALD_BLOCK)) {
+                    hasitemMeta.removeItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                     event.getInventory().setItem(1, falseitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 } else {
-                    pitemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+                    hasitemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                     event.getInventory().setItem(1, trueitem);
                     event.setCancelled(true);
+                    hasitem.setItemMeta(hasitemMeta);
                     return;
                 }
             }
 
             if (event.getSlot() == 2) {
-                if (event.getCurrentItem().equals(Material.EMERALD_BLOCK)) {
-                    pitemMeta.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                if (event.getCurrentItem().getType() == (Material.EMERALD_BLOCK)) {
+                    hasitemMeta.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                     event.getInventory().setItem(2, falseitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 } else {
-                    pitemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                    hasitemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                     event.getInventory().setItem(2, trueitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 }
             }
 
             if (event.getSlot() == 3) {
-                if (event.getCurrentItem().equals(Material.EMERALD_BLOCK)) {
-                    pitemMeta.removeItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                if (event.getCurrentItem().getType() == (Material.EMERALD_BLOCK)) {
+                    hasitemMeta.removeItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
                     event.getInventory().setItem(3, falseitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 } else {
-                    pitemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                    hasitemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
                     event.getInventory().setItem(3, trueitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 }
             }
 
             if (event.getSlot() == 4) {
-                if (event.getCurrentItem().equals(Material.EMERALD_BLOCK)) {
-                    pitemMeta.removeItemFlags(ItemFlag.HIDE_DESTROYS);
+                if (event.getCurrentItem().getType() == (Material.EMERALD_BLOCK)) {
+                    hasitemMeta.removeItemFlags(ItemFlag.HIDE_DESTROYS);
                     event.getInventory().setItem(4, falseitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 } else {
-                    pitemMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+                    hasitemMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
                     event.getInventory().setItem(4, trueitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 }
             }
 
             if (event.getSlot() == 5) {
-                if (event.getCurrentItem().equals(Material.EMERALD_BLOCK)) {
-                    pitemMeta.removeItemFlags(ItemFlag.HIDE_DYE);
+                if (event.getCurrentItem().getType() == (Material.EMERALD_BLOCK)) {
+                    hasitemMeta.removeItemFlags(ItemFlag.HIDE_DYE);
                     event.getInventory().setItem(5, falseitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 } else {
-                    pitemMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                    hasitemMeta.addItemFlags(ItemFlag.HIDE_DYE);
                     event.getInventory().setItem(5, trueitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 }
             }
 
             if (event.getSlot() == 6) {
-                if (event.getCurrentItem().equals(Material.EMERALD_BLOCK)) {
-                    pitemMeta.removeItemFlags(ItemFlag.HIDE_PLACED_ON);
+                if (event.getCurrentItem().getType() == Material.EMERALD_BLOCK) {
+                    hasitemMeta.removeItemFlags(ItemFlag.HIDE_PLACED_ON);
                     event.getInventory().setItem(6, falseitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 } else {
-                    pitemMeta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    hasitemMeta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
                     event.getInventory().setItem(6, trueitem);
+                    hasitem.setItemMeta(hasitemMeta);
                     event.setCancelled(true);
                     return;
                 }
             }
+
+            event.setCancelled(true);
         }
 
     }
@@ -180,7 +193,7 @@ public final class MohaUtil extends JavaPlugin {
                         return false;
                     }
 
-                    Inventory inventory = Bukkit.createInventory(null, 18, inv);
+                    Inventory inventory = Bukkit.createInventory(null, 18, inv + " " + itemMeta.getDisplayName());
 
                     ItemStack i1 = new ItemStack(Material.PAPER);
                     ItemMeta i1Meta = i1.getItemMeta();
