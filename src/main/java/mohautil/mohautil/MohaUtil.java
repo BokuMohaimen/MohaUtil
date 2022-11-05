@@ -177,6 +177,12 @@ public final class MohaUtil extends JavaPlugin implements Listener {
             event.setCancelled(true);
         }
 
+        if (event.getView().getTitle().contains(prefix)) {
+
+            event.setCancelled(true);
+
+        }
+
     }
 
     @Override
