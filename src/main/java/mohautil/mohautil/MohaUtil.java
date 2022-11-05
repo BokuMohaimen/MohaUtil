@@ -184,25 +184,25 @@ public final class MohaUtil extends JavaPlugin implements Listener {
 
         Player player = (Player) sender;
 
-        if (command.getName().equalsIgnoreCase("moha")) {
+        if (command.getName().equalsIgnoreCase("mz")) {
             ItemStack item = player.getInventory().getItemInMainHand();
             ItemMeta itemMeta = item.getItemMeta();
             if (args.length == 0) {
                 sender.sendMessage("§7==========="+prefix+"§7===========");
-                sender.sendMessage("§f§l/moha §e§lcolor §r§7➡ 装飾コードを表示します");
-                sender.sendMessage("§f§l/moha §e§lsetdata [数字]");
+                sender.sendMessage("§f§l/mz §e§lcolor §r§7➡ 装飾コードを表示します");
+                sender.sendMessage("§f§l/mz §e§lsetdata [数字]");
                 sender.sendMessage(" §r§7➡ 手に持っているアイテムをカスタムモデルデータ[数字]に設定します");
-                sender.sendMessage("§f§l/moha §e§lsetench [エンチャント名] [レベル]");
+                sender.sendMessage("§f§l/mz §e§lsetench [エンチャント名] [レベル]");
                 sender.sendMessage(" §r§7➡ 手に持っているアイテムにエンチャントを付与します");
-                sender.sendMessage("§f§l/moha §e§ldelench [エンチャント名] §r§7➡ 手に持っているアイテムエンチャントを外します");
-                sender.sendMessage("§f§l/moha §e§lsetflag §r§7➡ アイテムのフラグを設定するGUIを開きます");
+                sender.sendMessage("§f§l/mz §e§ldelench [エンチャント名] §r§7➡ 手に持っているアイテムエンチャントを外します");
+                sender.sendMessage("§f§l/mz §e§lsetflag §r§7➡ アイテムのフラグを設定するGUIを開きます");
                 sender.sendMessage("§7============================");
                 return true;
             }
             if (args.length == 1) {
                 if (args[0].equals("color")) {
 
-                    sender.sendMessage(prefix + " §11 §22 §33 §44 §55 §66 §77 §88 §99 §00 §aa §bb §cc §dd §ee §ff §gg §kk§r §ll§r §mm§r §nn§r §oo§r");
+                    sender.sendMessage(prefix + " §11 §22 §33 §44 §55 §66 §77 §88 §99 §00 §aa §bb §cc §dd §ee §ff §kk§r §ll§r §mm§r §nn§r §oo§r");
                     return true;
 
                 }
@@ -371,6 +371,50 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                     player.openInventory(inventory);
                     return true;
                 }
+
+                if (args[0].equalsIgnoreCase("cmd")) {
+
+                    if (item.getType() == Material.AIR) {
+                        player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
+                        return false;
+                    }
+
+                    Inventory inventory = Bukkit.createInventory(null, 54, prefix + " " + itemMeta.getDisplayName());
+
+                    Material material = item.getType();
+                    ItemStack cmditem = new ItemStack(material);
+                    ItemMeta cmdmeta = cmditem.getItemMeta();
+
+                    for (int i = 0 ; i <= 44 ; i++) {
+                        cmdmeta.setCustomModelData(i);
+                        cmdmeta.setDisplayName("§a§l" + i);
+                        cmditem.setItemMeta(cmdmeta);
+                        inventory.setItem(i,cmditem);
+                    }
+
+                    ItemStack itemStack = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
+                    inventory.setItem(45, itemStack);
+                    inventory.setItem(46, itemStack);
+                    inventory.setItem(48, itemStack);
+                    inventory.setItem(49, itemStack);
+                    inventory.setItem(50, itemStack);
+                    inventory.setItem(52, itemStack);
+                    inventory.setItem(53, itemStack);
+                    ItemStack back = new ItemStack(Material.ARROW);
+                    ItemMeta backMeta = back.getItemMeta();
+                    backMeta.setDisplayName("§a前へ");
+                    back.setItemMeta(backMeta);
+                    ItemStack next = new ItemStack(Material.ARROW);
+                    ItemMeta nextMeta = next.getItemMeta();
+                    nextMeta.setDisplayName("§a次へ");
+                    next.setItemMeta(nextMeta);
+                    inventory.setItem(47, back);
+                    inventory.setItem(51, next);
+
+                    player.openInventory(inventory);
+                    return true;
+                }
+
             }
             if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("setdata")) {
@@ -429,7 +473,7 @@ public final class MohaUtil extends JavaPlugin implements Listener {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if(args.length==1) {
-            return strings(args[0], Arrays.asList("color","setdata","setench","delench","setflag"));
+            return strings(args[0], Arrays.asList("color","cmd","setdata","setench","delench","setflag"));
         }
         if(args.length==2) {
             if (args[0].equalsIgnoreCase("setench")) {
