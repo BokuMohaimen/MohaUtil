@@ -24,6 +24,7 @@ public final class MohaUtil extends JavaPlugin implements Listener {
 
     String inv = "§asetFlags§r";
     String prefix = "§f§l[=§dMU§r§l=]";
+    int n = 0;
 
     @Override
     public void onEnable() {
@@ -179,8 +180,94 @@ public final class MohaUtil extends JavaPlugin implements Listener {
 
         if (event.getView().getTitle().contains(prefix)) {
 
-            event.setCancelled(true);
+            if (event.getWhoClicked().getInventory().getItemInMainHand().getType() == event.getCurrentItem().getType()) {
+                event.getWhoClicked().getInventory().addItem(event.getInventory().getItem(event.getSlot()));
+                event.setCancelled(true);
+            }
 
+            if (event.getSlot() == 51) {
+                Inventory inventory = Bukkit.createInventory(null, 54, prefix);
+
+                Material material = event.getWhoClicked().getInventory().getItemInMainHand().getType();
+                ItemStack cmditem = new ItemStack(material);
+                ItemMeta cmdmeta = cmditem.getItemMeta();
+                n = n + 45;
+
+                for (int i = 0 ; i <= 44 ; i++) {
+                    int cmd = i + n;
+                    cmdmeta.setCustomModelData(cmd);
+                    cmdmeta.setDisplayName("§a§l" + cmd);
+                    cmditem.setItemMeta(cmdmeta);
+                    inventory.setItem(i,cmditem);
+                }
+
+                ItemStack itemStack = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
+                inventory.setItem(45, itemStack);
+                inventory.setItem(46, itemStack);
+                inventory.setItem(48, itemStack);
+                inventory.setItem(49, itemStack);
+                inventory.setItem(50, itemStack);
+                inventory.setItem(52, itemStack);
+                inventory.setItem(53, itemStack);
+                ItemStack back = new ItemStack(Material.ARROW);
+                ItemMeta backMeta = back.getItemMeta();
+                backMeta.setDisplayName("§a前へ");
+                back.setItemMeta(backMeta);
+                ItemStack next = new ItemStack(Material.ARROW);
+                ItemMeta nextMeta = next.getItemMeta();
+                nextMeta.setDisplayName("§a次へ");
+                next.setItemMeta(nextMeta);
+                inventory.setItem(47, back);
+                inventory.setItem(51, next);
+
+                event.getWhoClicked().openInventory(inventory);
+                event.setCancelled(true);
+            }
+
+            if (event.getSlot() == 47) {
+                if (n == 0) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                Inventory inventory = Bukkit.createInventory(null, 54, prefix);
+
+                Material material = event.getWhoClicked().getInventory().getItemInMainHand().getType();
+                ItemStack cmditem = new ItemStack(material);
+                ItemMeta cmdmeta = cmditem.getItemMeta();
+                n = n - 45;
+
+                for (int i = 0 ; i <= 44 ; i++) {
+                    int cmd = i + n;
+                    cmdmeta.setCustomModelData(cmd);
+                    cmdmeta.setDisplayName("§a§l" + cmd);
+                    cmditem.setItemMeta(cmdmeta);
+                    inventory.setItem(i,cmditem);
+                }
+
+                ItemStack itemStack = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
+                inventory.setItem(45, itemStack);
+                inventory.setItem(46, itemStack);
+                inventory.setItem(48, itemStack);
+                inventory.setItem(49, itemStack);
+                inventory.setItem(50, itemStack);
+                inventory.setItem(52, itemStack);
+                inventory.setItem(53, itemStack);
+                ItemStack back = new ItemStack(Material.ARROW);
+                ItemMeta backMeta = back.getItemMeta();
+                backMeta.setDisplayName("§a前へ");
+                back.setItemMeta(backMeta);
+                ItemStack next = new ItemStack(Material.ARROW);
+                ItemMeta nextMeta = next.getItemMeta();
+                nextMeta.setDisplayName("§a次へ");
+                next.setItemMeta(nextMeta);
+                inventory.setItem(47, back);
+                inventory.setItem(51, next);
+                event.getWhoClicked().openInventory(inventory);
+                event.setCancelled(true);
+            }
+
+            event.setCancelled(true);
         }
 
     }
@@ -196,6 +283,9 @@ public final class MohaUtil extends JavaPlugin implements Listener {
             if (args.length == 0) {
                 sender.sendMessage("§7==========="+prefix+"§7===========");
                 sender.sendMessage("§f§l/mz §e§lcolor §r§7➡ 装飾コードを表示します");
+                sender.sendMessage("§f§l/mz §e§lcmd");
+                sender.sendMessage(" §r§7➡ 手に持っているアイテムのカスタムモデルデータを");
+                sender.sendMessage(" §r§7➡ GUIで表示します(そのGUIのアイテムをクリックすれば入手できます)");
                 sender.sendMessage("§f§l/mz §e§lsetdata [数字]");
                 sender.sendMessage(" §r§7➡ 手に持っているアイテムをカスタムモデルデータ[数字]に設定します");
                 sender.sendMessage("§f§l/mz §e§lsetench [エンチャント名] [レベル]");
