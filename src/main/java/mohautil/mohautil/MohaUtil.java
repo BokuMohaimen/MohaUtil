@@ -292,6 +292,7 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                 sender.sendMessage(" §r§7➡ 手に持っているアイテムにエンチャントを付与します");
                 sender.sendMessage("§f§l/mz §e§ldelench [エンチャント名] §r§7➡ 手に持っているアイテムエンチャントを外します");
                 sender.sendMessage("§f§l/mz §e§lsetflag §r§7➡ アイテムのフラグを設定するGUIを開きます");
+                sender.sendMessage("§f§l/mz §e§lsetname §r§7➡ 手に持っているアイテムの名前を変更します");
                 sender.sendMessage("§7============================");
                 return true;
             }
@@ -546,6 +547,18 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                     return true;
                 }
 
+                if (args[0].equalsIgnoreCase("setname")) {
+
+                    if (item.getType() == Material.AIR) {
+                        player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
+                        return false;
+                    }
+                    itemMeta.setDisplayName(args[1].replace("&","§"));
+                    item.setItemMeta(itemMeta);
+                    player.sendMessage(prefix + " §f§l名前を §r" + args[1].replace("&","§") + " §r§lに変更しました");
+                    return true;
+                }
+
             }
             if (args.length == 3) {
                 if (args[0].equalsIgnoreCase("setench")) {
@@ -569,7 +582,7 @@ public final class MohaUtil extends JavaPlugin implements Listener {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if(args.length==1) {
-            return strings(args[0], Arrays.asList("color","cmd","setdata","setench","delench","setflag"));
+            return strings(args[0], Arrays.asList("color","cmd","setdata","setench","delench","setflag","setname"));
         }
         if(args.length==2) {
             if (args[0].equalsIgnoreCase("setench")) {
