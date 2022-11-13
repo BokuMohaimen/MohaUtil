@@ -43,6 +43,10 @@ public final class MohaUtil extends JavaPlugin implements Listener {
 
         Player player = (Player) sender;
 
+        if (command.getName().equalsIgnoreCase("atm")) {
+
+        }
+
         if (command.getName().equalsIgnoreCase("mz")) {
 
             if (!hasPerm((Player) sender)) return false;
