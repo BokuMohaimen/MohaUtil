@@ -26,11 +26,13 @@ public final class MohaUtil extends JavaPlugin implements Listener {
     String inv = "§asetFlags§r";
     String prefix = "§f§l[=§dMU§r§l=]";
     int n = 0;
+    VaultManager vault;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
+        vault = new VaultManager(this);
     }
 
     @Override

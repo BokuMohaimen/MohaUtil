@@ -41,6 +41,50 @@ public class VaultManager {
     public double getBal(UUID uuid) {
         return economy.getBalance(Bukkit.getOfflinePlayer(uuid).getPlayer());
     }
+    public String getJpyBal(UUID uuid) {
+        double money = getBal(uuid);
+
+        if(money < 10000){
+            return String.valueOf(money);
+        }
+
+        if(money < 100000000){
+            long man = (long) (money/10000);
+            String left = String.valueOf(money).substring(String.valueOf(money).length()-4);
+            if(Long.parseLong(left) == 0){
+                return man + "万";
+            }
+            return man + "万" + Long.parseLong(left);
+        }
+
+        if(money < 100000000000L){
+            long oku = (long) (money/100000000);
+            String man = String.valueOf(money).substring(String.valueOf(money).length() -8);
+            String te = man.substring(0, 4);
+            String left = String.valueOf(money).substring(String.valueOf(money).length() -4);
+            if(Long.parseLong(te)  == 0){
+                if( Long.parseLong(left) == 0){
+                    return oku + "億";
+                }else{
+                    return oku + "億"+ Long.parseLong(left);
+                }
+            }else{
+                if( Long.parseLong(left) == 0){
+                    return oku + "億" + Long.parseLong(te) + "万";
+                }
+            }
+            return oku + "億" + Long.parseLong(te) + "万" + Long.parseLong(left);
+        }
+
+        return "null";
+
+    }
+
+    public void showJpyBal(UUID uuid) {
+        OfflinePlayer p = Bukkit.getOfflinePlayer(uuid).getPlayer();
+        String money = getJpyBal(uuid);
+        Objects.requireNonNull(Objects.requireNonNull(p).getPlayer()).sendMessage(prefix + "あなたの所持金は " + money + "円です");
+    }
 
     public void showBal(UUID uuid) {
         OfflinePlayer p = Bukkit.getOfflinePlayer(uuid).getPlayer();
@@ -48,7 +92,7 @@ public class VaultManager {
         Objects.requireNonNull(Objects.requireNonNull(p).getPlayer()).sendMessage(prefix + "あなたの所持金は " + (int) money + "円です");
     }
 
-    public Boolean withdraw(Player player, double money) {
+    public boolean withdraw(Player player, double money) {
         OfflinePlayer p = Bukkit.getOfflinePlayer(player.getUniqueId());
         EconomyResponse resp = economy.withdrawPlayer(p, money);
         if (resp.transactionSuccess()) {
@@ -60,7 +104,7 @@ public class VaultManager {
         return false;
     }
 
-    public Boolean deposit(Player player, double money) {
+    public boolean deposit(Player player, double money) {
         OfflinePlayer p = Bukkit.getOfflinePlayer(player.getUniqueId());
         EconomyResponse resp = economy.depositPlayer(p, money);
         if (resp.transactionSuccess()) {
