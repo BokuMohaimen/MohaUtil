@@ -14,10 +14,39 @@ public class InventoryEvent implements Listener {
 
     String inv = "§asetFlags§r";
     String prefix = "§f§l[=§dMU§r§l=]";
+    String atmpre = "§e§l[§b§lMZN§e§lATM] ";
     int n = 0;
+    VaultManager vault;
 
     @EventHandler
     public void onClickInventory(InventoryClickEvent event) {
+
+        if (event.getView().getTitle().equals(atmpre)) {
+
+            if (event.getCurrentItem().equals(Material.CHEST)) {
+                event.setCancelled(true);
+                event.getWhoClicked().openInventory(depoInv());
+            }
+            if (event.getCurrentItem().equals(Material.DROPPER)) {
+                event.setCancelled(true);
+                event.getWhoClicked().openInventory(withInv());
+            }
+
+            event.setCancelled(true);
+
+        }
+
+        if (event.getView().getTitle().equals(atmpre + "§e§l預け入れ")) {
+
+
+
+        }
+
+        if (event.getView().getTitle().equals(atmpre + "§6§l引き出し")) {
+
+
+
+        }
 
         if (event.getView().getTitle().contains(inv)) {
 
@@ -249,6 +278,18 @@ public class InventoryEvent implements Listener {
             event.setCancelled(true);
         }
 
+    }
+
+    public Inventory depoInv() {
+        Inventory inventory = Bukkit.createInventory(null, 54, atmpre + "§e§l預け入れ");
+
+        return inventory;
+    }
+
+    public Inventory withInv() {
+        Inventory inventory = Bukkit.createInventory(null, 27, atmpre + "§6§l引き出し");
+
+        return inventory;
     }
 
 }

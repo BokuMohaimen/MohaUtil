@@ -25,6 +25,7 @@ public final class MohaUtil extends JavaPlugin implements Listener {
     String Perm = "mu.op";
     String inv = "§asetFlags§r";
     String prefix = "§f§l[=§dMU§r§l=]";
+    String atmpre = "§e§l[§b§lMZN§e§lATM] ";
     int n = 0;
     VaultManager vault;
 
@@ -47,6 +48,9 @@ public final class MohaUtil extends JavaPlugin implements Listener {
 
         if (command.getName().equalsIgnoreCase("atm")) {
 
+            player.openInventory(createATMmenu());
+
+            return true;
         }
 
         if (command.getName().equalsIgnoreCase("mz")) {
@@ -442,6 +446,37 @@ public final class MohaUtil extends JavaPlugin implements Listener {
             return false;
         }
         return true;
+    }
+
+    public Inventory createATMmenu() {
+
+        Inventory inventory = Bukkit.createInventory(null, 27, atmpre);
+        ItemStack glass = new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS);
+        ItemStack depoitem = new ItemStack(Material.CHEST);
+        ItemStack withitem = new ItemStack(Material.DROPPER);
+        ItemMeta glassmeta = glass.getItemMeta();
+        ItemMeta depometa = depoitem.getItemMeta();
+        ItemMeta withmeta = withitem.getItemMeta();
+        glassmeta.setDisplayName(" ");
+        glass.setItemMeta(glassmeta);
+        depometa.setDisplayName("§e§l預け入れ");
+        depoitem.setItemMeta(depometa);
+        withmeta.setDisplayName("§6§l引き出し");
+        withitem.setItemMeta(withmeta);
+
+        int[] glassi = {0,4,8,9,13,17,18,22,26};
+        int[] depo = {1,2,3,10,11,12,19,20,21};
+        int[] with = {5,6,7,14,15,16,23,24,25};
+
+        for (int i : glassi) {
+            inventory.setItem(i, glass);
+        }
+        for (int i = 0 ; i < depo.length ; i++) {
+            inventory.setItem(depo[i], depoitem);
+            inventory.setItem(with[i], withitem);
+        }
+        return inventory;
+
     }
 
 }
