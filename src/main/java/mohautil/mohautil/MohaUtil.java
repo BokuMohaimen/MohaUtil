@@ -3,6 +3,8 @@ package mohautil.mohautil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -10,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -19,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public final class MohaUtil extends JavaPlugin implements Listener {
 
@@ -32,7 +36,7 @@ public final class MohaUtil extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        Bukkit.getServer().getPluginManager().registerEvents(this, this);
+        Bukkit.getServer().getPluginManager().registerEvents(new InventoryEvent(), this);
         vault = new VaultManager(this);
     }
 
@@ -46,13 +50,6 @@ public final class MohaUtil extends JavaPlugin implements Listener {
 
         Player player = (Player) sender;
 
-        if (command.getName().equalsIgnoreCase("atm")) {
-
-            player.openInventory(createATMmenu());
-
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("mz")) {
 
             if (!hasPerm((Player) sender)) return false;
@@ -62,7 +59,9 @@ public final class MohaUtil extends JavaPlugin implements Listener {
             if (args.length == 0) {
                 sender.sendMessage("§7==========="+prefix+"§7===========");
                 sender.sendMessage("§f§l/mz §e§lcolor §r§7➡ 装飾コードを表示します");
-                sender.sendMessage("§f§l/mz §e§lcmd");
+                sender.sendMessage("§f§l/mz §e§lhelp [ページ数] §r§7➡ これ表示します");
+                sender.sendMessage("§f§l/mz §e§lcmd §r§7➡ 手に持っているアイテムのモデル番号を表示します");
+                sender.sendMessage("§f§l/mz §e§lcmdlist");
                 sender.sendMessage(" §r§7➡ 手に持っているアイテムのカスタムモデルデータを");
                 sender.sendMessage(" §r§7➡ GUIで表示します(そのGUIのアイテムをクリックすれば入手できます)");
                 sender.sendMessage("§f§l/mz §e§lsetdata [数字]");
@@ -71,8 +70,6 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                 sender.sendMessage(" §r§7➡ 手に持っているアイテムにエンチャントを付与します");
                 sender.sendMessage("§f§l/mz §e§ldelench [エンチャント名] §r§7➡ 手に持っているアイテムエンチャントを外します");
                 sender.sendMessage("§f§l/mz §e§lsetflag §r§7➡ アイテムのフラグを設定するGUIを開きます");
-                sender.sendMessage("§f§l/mz §e§lsetname §r§7➡ 手に持っているアイテムの名前を変更します");
-                sender.sendMessage(" §r§7➡ (*を使うと空白になります)");
                 sender.sendMessage("§7============================");
                 return true;
             }
@@ -249,7 +246,7 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                     return true;
                 }
 
-                if (args[0].equalsIgnoreCase("cmd")) {
+                if (args[0].equalsIgnoreCase("cmdlist")) {
 
                     if (item.getType() == Material.AIR) {
                         player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
@@ -292,8 +289,56 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                     return true;
                 }
 
+                if (args[0].equalsIgnoreCase("cmd")) {
+
+                    if (item.getType() == Material.AIR) {
+                        player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
+                        return false;
+                    }
+                    if (!itemMeta.hasCustomModelData()) {
+                        player.sendMessage(prefix + " §cこのアイテムはモデルを持っていません！");
+                        return false;
+                    }
+                    player.sendMessage(prefix + " §f§lアイテムのモデル番号は §e§l" + itemMeta.getCustomModelData() + " §f§lです");
+                    return true;
+                }
+
             }
             if (args.length == 2) {
+
+                if (args[0].equalsIgnoreCase("help")) {
+                    if (args[1].isEmpty()) {
+                        sender.sendMessage("§7==========="+prefix+"§7===========");
+                        sender.sendMessage("§f§l/mz §e§lcolor §r§7➡ 装飾コードを表示します");
+                        sender.sendMessage("§f§l/mz §e§lhelp [ページ数] §r§7➡ これ表示します");
+                        sender.sendMessage("§f§l/mz §e§lcmd");
+                        sender.sendMessage(" §r§7➡ 手に持っているアイテムのカスタムモデルデータを");
+                        sender.sendMessage(" §r§7➡ GUIで表示します(そのGUIのアイテムをクリックすれば入手できます)");
+                        sender.sendMessage("§f§l/mz §e§lsetdata [数字]");
+                        sender.sendMessage(" §r§7➡ 手に持っているアイテムをカスタムモデルデータ[数字]に設定します");
+                        sender.sendMessage("§f§l/mz §e§lsetench [エンチャント名] [レベル]");
+                        sender.sendMessage(" §r§7➡ 手に持っているアイテムにエンチャントを付与します");
+                        sender.sendMessage("§f§l/mz §e§ldelench [エンチャント名] §r§7➡ 手に持っているアイテムエンチャントを外します");
+                        sender.sendMessage("§f§l/mz §e§lsetflag §r§7➡ アイテムのフラグを設定するGUIを開きます");
+                        sender.sendMessage("§7============================");
+                        return true;
+                    }
+                    if (args[1].equalsIgnoreCase("2")) {
+                        sender.sendMessage("§7==========="+prefix+"§7===========");
+                        sender.sendMessage("§f§l/mz §e§lsetmod [mod名] [部位] 数値 [演算]");
+                        sender.sendMessage(" §r§7➡ 例: /mz setmod speed hand 0.05 add");
+                        sender.sendMessage(" §r§7➡ 例: そのアイテムを手に持っている時、移動速度が0.05加算されます");
+                        sender.sendMessage("§f§l/mz §e§ldelmod [部位]");
+                        sender.sendMessage(" §r§7➡ [部位]についているmodを削除します");
+                        sender.sendMessage("§f§l/mz §e§lsetname [名前]§r§7➡ 手に持っているアイテムの名前を変更します");
+                        sender.sendMessage(" §r§7➡ (*は空白になります)");
+                        sender.sendMessage("§f§l/mz §e§lsetlore [説明文] §r§7➡ 説明文を変更します");
+                        sender.sendMessage(" §r§7➡ (*は空白に、;は改行になります)");
+                        sender.sendMessage("§7============================");
+                        return true;
+                    }
+                }
+
                 if (args[0].equalsIgnoreCase("setdata")) {
 
                     if (item.getType() == Material.AIR) {
@@ -327,6 +372,23 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                     return true;
                 }
 
+                if (args[0].equalsIgnoreCase("delmod")) {
+
+                    if (item.getType() == Material.AIR) {
+                        player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
+                        return false;
+                    }
+                    if (!itemMeta.hasAttributeModifiers()) {
+                        player.sendMessage(prefix + " §c外せるModifireは存在しません！");
+                        return false;
+                    }
+                    EquipmentSlot slot = EquipmentSlot.valueOf(args[1]);
+                    itemMeta.removeAttributeModifier(slot);
+                    item.setItemMeta(itemMeta);
+                    player.sendMessage(prefix + " §e§l" + args[1] + " §r§lについているModifireを外しました");
+                    return true;
+                }
+
                 if (args[0].equalsIgnoreCase("setname")) {
 
                     if (item.getType() == Material.AIR) {
@@ -336,6 +398,17 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                     itemMeta.setDisplayName(args[1].replace("&","§").replace("*", " "));
                     item.setItemMeta(itemMeta);
                     player.sendMessage(prefix + " §f§l名前を §r" + args[1].replace("&","§") + " §r§lに変更しました");
+                    return true;
+                }
+
+                if (args[0].equalsIgnoreCase("setlore")) {
+                    if (item.getType() == Material.AIR) {
+                        player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
+                        return false;
+                    }
+                    List<String> lore = List.of(args[1].replace("*"," ").replace("&","§").split(";"));
+                    itemMeta.setLore(lore);
+                    item.setItemMeta(itemMeta);
                     return true;
                 }
 
@@ -351,6 +424,63 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                     player.sendMessage(prefix + " §e§l" + args[1] + " §rの レベル§e§l " + args[2] + " §r§lを付与しました");
                     return true;
                 }
+            }
+            if (args.length == 5) {
+                if (args[0].equalsIgnoreCase("setmod")) {
+                    if (item.getType() == Material.AIR) {
+                        player.sendMessage(prefix + " §c手に何かアイテムを持ってださい！");
+                        return false;
+                    }
+                    AttributeModifier modifier;
+                    String modname;
+                    EquipmentSlot slot;
+                    AttributeModifier.Operation operation;
+                    double num = Double.parseDouble(args[3]);
+                    switch (args[1]) {
+                        case "armor" -> modname = "GENERIC_ARMOR";
+                        case "armortoughness" -> modname = "GENERIC_ARMOR_TOUGHNESS";
+                        case "attackdamage" -> modname = "GENERIC_ATTACK_DAMAGE";
+                        case "attackknockback" -> modname = "GENERIC_ATTACK_KNOCKBACK";
+                        case "attackspeed" -> modname = "GENERIC_ATTACK_SPEED";
+                        case "flyspeed" -> modname = "GENERIC_FLYING_SPEED";
+                        case "followrange" -> modname = "GENERIC_FOLLOW_RANGE";
+                        case "knockbackresistance" -> modname = "GENERIC_KNOCKBACK_RESISTANCE";
+                        case "luck" -> modname = "GENERIC_LUCK";
+                        case "maxhealth" -> modname = "GENERIC_MAX_HEALTH";
+                        case "speed" -> modname = "GENERIC_MOVEMENT_SPEED";
+                        case "horsejump" -> modname = "HORSE_JUMP_STRENGTH";
+                        case "zombie" -> modname = "ZOMBIE_SPAWN_REINFORCEMENTS";
+                        default -> {
+                            player.sendMessage(prefix + " §c使い方が間違っています");
+                            return false;
+                        }
+                    }
+                    switch (args[2]) {
+                        case "head" -> slot = EquipmentSlot.HEAD;
+                        case "chest" -> slot = EquipmentSlot.CHEST;
+                        case "legs" -> slot = EquipmentSlot.LEGS;
+                        case "feet" -> slot = EquipmentSlot.FEET;
+                        case "hand" -> slot = EquipmentSlot.HAND;
+                        case "offhand" -> slot = EquipmentSlot.OFF_HAND;
+                        default -> {
+                            player.sendMessage(prefix + " §c使い方が間違っています");
+                            return false;
+                        }
+                    }
+                    switch (args[4]) {
+                        case "add" -> operation = AttributeModifier.Operation.ADD_NUMBER;
+                        case "scalar" -> operation = AttributeModifier.Operation.ADD_SCALAR;
+                        case "multiply" -> operation = AttributeModifier.Operation.MULTIPLY_SCALAR_1;
+                        default -> {
+                            player.sendMessage(prefix + " §c使い方が間違っています");
+                            return false;
+                        }
+                    }
+                    modifier = new AttributeModifier(UUID.randomUUID(), modname, num, operation, slot);
+                    itemMeta.addAttributeModifier(Attribute.valueOf(modname), modifier);
+                    item.setItemMeta(itemMeta);
+                    return true;
+                }
             } else {
                 sender.sendMessage(prefix + " §c使い方が間違っています！");
                 return false;
@@ -362,7 +492,7 @@ public final class MohaUtil extends JavaPlugin implements Listener {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if(args.length==1) {
-            return strings(args[0], Arrays.asList("color","cmd","setdata","setench","delench","setflag","setname"));
+            return strings(args[0], Arrays.asList("color","cmd","setdata","setench","delench","delmod","setflag","setname","setmod","setlore","help","cmdlist"));
         }
         if(args.length==2) {
             if (args[0].equalsIgnoreCase("setench")) {
@@ -426,6 +556,54 @@ public final class MohaUtil extends JavaPlugin implements Listener {
                 list.add("lure");
                 list.add("mending");
                 return strings(args[1], list);
+            }
+            if (args[0].equalsIgnoreCase("setmod")) {
+                List<String> list = new ArrayList<>();
+                list.add("armor");
+                list.add("armortoughness");
+                list.add("attackdamage");
+                list.add("attackknockback");
+                list.add("attackspeed");
+                list.add("flyspeed");
+                list.add("followrange");
+                list.add("knockbackresistance");
+                list.add("luck");
+                list.add("maxhealth");
+                list.add("speed");
+                list.add("horsejump");
+                list.add("zombie");
+                return strings(args[1], list);
+            }
+            if (args[0].equalsIgnoreCase("delmod")) {
+                List<String> list = new ArrayList<>();
+                list.add("HEAD");
+                list.add("CHEST");
+                list.add("LEGS");
+                list.add("FEET");
+                list.add("HAND");
+                list.add("OFF_HAND");
+                return strings(args[1], list);
+            }
+        }
+        if (args.length == 3) {
+            if (args[0].equalsIgnoreCase("setmod")) {
+                List<String> list = new ArrayList<>();
+                list.add("head");
+                list.add("chest");
+                list.add("legs");
+                list.add("feet");
+                list.add("hand");
+                list.add("offhand");
+                return strings(args[2], list);
+            }
+        }
+        if (args.length == 5) {
+            if (args[0].equalsIgnoreCase("setmod")) {
+                List<String> list = new ArrayList<>();
+                list.add("add");
+                list.add("scalar");
+                list.add("multiply");
+                return strings(args[4], list);
             }
         }
         return null;

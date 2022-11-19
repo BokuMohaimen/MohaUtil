@@ -4,7 +4,6 @@ main: mohautil.mohautil.MohaUtil
 api-version: 1.19
 commands:
   mz:
-  atm:
 permissions:
   mu.op:
     default: op

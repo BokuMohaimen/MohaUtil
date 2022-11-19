@@ -89,7 +89,7 @@ public class VaultManager {
     public void showBal(UUID uuid) {
         OfflinePlayer p = Bukkit.getOfflinePlayer(uuid).getPlayer();
         double money = getBal(uuid);
-        Objects.requireNonNull(Objects.requireNonNull(p).getPlayer()).sendMessage(prefix + "あなたの所持金は " + (int) money + "円です");
+        Objects.requireNonNull(Objects.requireNonNull(p).getPlayer()).sendMessage(prefix + "あなたの所持金は " + money + "円です");
     }
 
     public boolean withdraw(Player player, double money) {
@@ -97,7 +97,7 @@ public class VaultManager {
         EconomyResponse resp = economy.withdrawPlayer(p, money);
         if (resp.transactionSuccess()) {
             if (p.isOnline()) {
-                Objects.requireNonNull(p.getPlayer()).sendMessage(prefix + (int) money + "円支払いました");
+                Objects.requireNonNull(p.getPlayer()).sendMessage(prefix + money + "円支払いました");
             }
             return true;
         }
@@ -109,7 +109,7 @@ public class VaultManager {
         EconomyResponse resp = economy.depositPlayer(p, money);
         if (resp.transactionSuccess()) {
             if (p.isOnline()) {
-                Objects.requireNonNull(p.getPlayer()).sendMessage(prefix + (int) money + "円受取りました");
+                Objects.requireNonNull(p.getPlayer()).sendMessage(prefix + money + "円受取りました");
             }
             return true;
         }
